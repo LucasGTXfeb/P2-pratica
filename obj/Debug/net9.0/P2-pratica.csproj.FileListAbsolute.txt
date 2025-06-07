@@ -1,0 +1,15 @@
+c:\Users\Desktop\Desktop\P2-pratica\bin\Debug\net9.0\P2-pratica.exe
+C:\Users\Desktop\Desktop\P2-pratica\bin\Debug\net9.0\P2-pratica.deps.json
+C:\Users\Desktop\Desktop\P2-pratica\bin\Debug\net9.0\P2-pratica.runtimeconfig.json
+c:\Users\Desktop\Desktop\P2-pratica\bin\Debug\net9.0\P2-pratica.dll
+c:\Users\Desktop\Desktop\P2-pratica\bin\Debug\net9.0\P2-pratica.pdb
+c:\Users\Desktop\Desktop\P2-pratica\obj\Debug\net9.0\P2-pratica.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\Desktop\Desktop\P2-pratica\obj\Debug\net9.0\P2-pratica.AssemblyInfoInputs.cache
+c:\Users\Desktop\Desktop\P2-pratica\obj\Debug\net9.0\P2-pratica.AssemblyInfo.cs
+c:\Users\Desktop\Desktop\P2-pratica\obj\Debug\net9.0\P2-pratica.csproj.CoreCompileInputs.cache
+c:\Users\Desktop\Desktop\P2-pratica\obj\Debug\net9.0\P2-pratica.sourcelink.json
+c:\Users\Desktop\Desktop\P2-pratica\obj\Debug\net9.0\P2-pratica.dll
+c:\Users\Desktop\Desktop\P2-pratica\obj\Debug\net9.0\refint\P2-pratica.dll
+c:\Users\Desktop\Desktop\P2-pratica\obj\Debug\net9.0\P2-pratica.pdb
+C:\Users\Desktop\Desktop\P2-pratica\obj\Debug\net9.0\P2-pratica.genruntimeconfig.cache
+C:\Users\Desktop\Desktop\P2-pratica\obj\Debug\net9.0\ref\P2-pratica.dll
