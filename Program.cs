@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using LojaVirtual.Entities;
 using LojaVirtual.Repositories;
+using LojaVirtual.Factories;
+using LojaVirtual.Services;
 
 namespace LojaVirtual
 {
@@ -10,14 +14,19 @@ namespace LojaVirtual
         {
             var produtoRepo = new ProdutoRepository();
             var clienteRepo = new ClienteRepository();
+            var pedidoFactory = new PedidoFactory();
+            var pedidoService = new PedidoService(pedidoFactory);
 
             bool executando = true;
+            int idPedido = 1;
 
             while (executando)
             {
                 Console.WriteLine("\n====== Menu Principal ======");
                 Console.WriteLine("1 - Cadastrar Produto");
                 Console.WriteLine("2 - Cadastrar Cliente");
+                Console.WriteLine("3 - Criar Pedido");
+                Console.WriteLine("4 - Ver Pedidos");
                 Console.WriteLine("0 - Sair");
                 Console.Write("Escolha uma opção: ");
 
@@ -72,6 +81,70 @@ namespace LojaVirtual
                         catch (Exception ex)
                         {
                             Console.WriteLine($"Erro: {ex.Message}");
+                        }
+                        break;
+
+                    case "3":
+                        var clientes = clienteRepo.ObterTodos().ToList();
+                        var produtos = produtoRepo.ObterTodos().ToList();
+
+                        if (!clientes.Any())
+                        {
+                            Console.WriteLine("Nenhum cliente cadastrado.");
+                            break;
+                        }
+
+                        if (!produtos.Any())
+                        {
+                            Console.WriteLine("Nenhum produto cadastrado.");
+                            break;
+                        }
+
+                        Console.WriteLine("Escolha o cliente:");
+                        for (int i = 0; i < clientes.Count; i++)
+                            Console.WriteLine($"{i + 1} - {clientes[i].Nome}");
+
+                        int indiceCliente = int.Parse(Console.ReadLine()) - 1;
+                        var clienteSelecionado = clientes[indiceCliente];
+
+                        var itens = new List<(Produto, int)>();
+                        bool adicionando = true;
+
+                        while (adicionando)
+                        {
+                            Console.WriteLine("Escolha o produto:");
+                            for (int i = 0; i < produtos.Count; i++)
+                                Console.WriteLine($"{i + 1} - {produtos[i].Nome} (R$ {produtos[i].Preco})");
+
+                            int indiceProduto = int.Parse(Console.ReadLine()) - 1;
+                            var produtoSelecionado = produtos[indiceProduto];
+
+                            Console.Write("Quantidade: ");
+                            int quantidade = int.Parse(Console.ReadLine());
+
+                            itens.Add((produtoSelecionado, quantidade));
+
+                            Console.Write("Adicionar mais produtos? (s/n): ");
+                            adicionando = Console.ReadLine().ToLower() == "s";
+                        }
+
+                        var pedido = pedidoService.CriarPedido(idPedido++, clienteSelecionado, itens);
+
+                        Console.WriteLine("\n--- Pedido Criado com Sucesso ---");
+                        Console.WriteLine($"Cliente: {pedido.Cliente.Nome}");
+                        Console.WriteLine($"Data: {pedido.Data}");
+                        foreach (var item in pedido.Itens)
+                        {
+                            Console.WriteLine($"Produto: {item.Produto.Nome} | Qtd: {item.Quantidade} | Subtotal: R$ {item.Subtotal}");
+                        }
+                        Console.WriteLine($"Valor Total: R$ {pedido.ValorTotal}");
+                        break;
+
+                    case "4":
+                        var pedidos = pedidoService.ObterPedidos();
+                        foreach (var p in pedidos)
+                        {
+                            Console.WriteLine($"\nPedido #{p.Id} - Cliente: {p.Cliente.Nome} - Total: R$ {p.ValorTotal}");
                         }
                         break;
 
