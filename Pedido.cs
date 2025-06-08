@@ -10,7 +10,9 @@ namespace LojaVirtual.Entities
         public Cliente Cliente { get; private set; }
         public List<ItemPedido> Itens { get; private set; }
         public DateTime Data { get; private set; }
+
         public decimal ValorTotal => Itens.Sum(item => item.Subtotal);
+        public decimal ValorComDesconto { get; set; } 
 
         public Pedido(int id, Cliente cliente)
         {

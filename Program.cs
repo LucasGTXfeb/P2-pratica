@@ -171,6 +171,7 @@ namespace LojaVirtual
                             Console.WriteLine($"Produto: {item.Produto.Nome} | Qtd: {item.Quantidade} | Subtotal: R$ {item.Subtotal:0.00}");
                         }
                         Console.WriteLine($"Valor Total Bruto: R$ {pedido.ValorTotal:0.00}");
+                        Console.WriteLine($"Valor Final com Desconto: R$ {pedido.ValorComDesconto:0.00}");
                         break;
 
                     case "4":
@@ -195,7 +196,8 @@ namespace LojaVirtual
                                     Console.WriteLine($"  - {item.Produto.Nome} | Quantidade: {item.Quantidade} | Subtotal: R$ {item.Subtotal:0.00}");
                                 }
 
-                                Console.WriteLine($"💰 Total do Pedido: R$ {p.ValorTotal:0.00}");
+                                Console.WriteLine($"💰 Total Bruto: R$ {p.ValorTotal:0.00}");
+                                Console.WriteLine($"🎁 Total com Desconto: R$ {p.ValorComDesconto:0.00}");
                                 Console.WriteLine(new string('-', 40));
                             }
                         }

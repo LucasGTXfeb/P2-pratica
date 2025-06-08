@@ -28,6 +28,8 @@ namespace LojaVirtual.Services
             _descontoContext.DefinirEstrategia(estrategia);
             var desconto = _descontoContext.CalcularDesconto(pedido);
 
+            pedido.ValorComDesconto = pedido.ValorTotal - desconto;
+
             _logger.Registrar($"Pedido #{id} criado para {cliente.Nome} - Total bruto: R$ {pedido.ValorTotal:0.00}, Desconto: R$ {desconto:0.00}");
 
             _pedidos.Add(pedido);
