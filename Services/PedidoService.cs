@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LojaVirtual.Entities;
 using LojaVirtual.Factories;
 using LojaVirtual.Services.Descontos;
+using LojaVirtual.Services.Logs;
 
 namespace LojaVirtual.Services
 {
@@ -11,12 +12,14 @@ namespace LojaVirtual.Services
         private readonly IPedidoFactory _pedidoFactory;
         private readonly List<Pedido> _pedidos;
         private readonly DescontoContext _descontoContext;
+        private readonly ILogger _logger;
 
-        public PedidoService(IPedidoFactory pedidoFactory)
+        public PedidoService(IPedidoFactory pedidoFactory, ILogger logger)
         {
             _pedidoFactory = pedidoFactory;
-            _pedidos = new List<Pedido>();
             _descontoContext = new DescontoContext();
+            _logger = logger;
+            _pedidos = new List<Pedido>();
         }
 
         public Pedido CriarPedidoComDesconto(int id, Cliente cliente, List<(Produto, int)> itens, IDescontoStrategy estrategia)
@@ -25,8 +28,7 @@ namespace LojaVirtual.Services
             _descontoContext.DefinirEstrategia(estrategia);
             var desconto = _descontoContext.CalcularDesconto(pedido);
 
-            Console.WriteLine($"\nDesconto aplicado: R$ {desconto:0.00}");
-            Console.WriteLine($"Total com desconto: R$ {(pedido.ValorTotal - desconto):0.00}");
+            _logger.Registrar($"Pedido #{id} criado para {cliente.Nome} - Total bruto: R$ {pedido.ValorTotal:0.00}, Desconto: R$ {desconto:0.00}");
 
             _pedidos.Add(pedido);
             return pedido;

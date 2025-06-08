@@ -6,6 +6,7 @@ using LojaVirtual.Repositories;
 using LojaVirtual.Factories;
 using LojaVirtual.Services;
 using LojaVirtual.Services.Descontos;
+using LojaVirtual.Services.Logs;
 
 namespace LojaVirtual
 {
@@ -16,7 +17,8 @@ namespace LojaVirtual
             var produtoRepo = new ProdutoRepository();
             var clienteRepo = new ClienteRepository();
             var pedidoFactory = new PedidoFactory();
-            var pedidoService = new PedidoService(pedidoFactory);
+            var logger = new LogConsole();
+            var pedidoService = new PedidoService(pedidoFactory, logger);
 
             int idPedido = 1;
             bool executando = true;
