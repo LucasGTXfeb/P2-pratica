@@ -5,6 +5,7 @@ using LojaVirtual.Entities;
 using LojaVirtual.Repositories;
 using LojaVirtual.Factories;
 using LojaVirtual.Services;
+using LojaVirtual.Services.Descontos;
 
 namespace LojaVirtual
 {
@@ -17,8 +18,8 @@ namespace LojaVirtual
             var pedidoFactory = new PedidoFactory();
             var pedidoService = new PedidoService(pedidoFactory);
 
-            bool executando = true;
             int idPedido = 1;
+            bool executando = true;
 
             while (executando)
             {
@@ -100,7 +101,7 @@ namespace LojaVirtual
                             break;
                         }
 
-                        Console.WriteLine("Escolha o cliente:");
+                        Console.WriteLine("\nEscolha o cliente:");
                         for (int i = 0; i < clientes.Count; i++)
                             Console.WriteLine($"{i + 1} - {clientes[i].Nome}");
 
@@ -112,7 +113,7 @@ namespace LojaVirtual
 
                         while (adicionando)
                         {
-                            Console.WriteLine("Escolha o produto:");
+                            Console.WriteLine("\nEscolha o produto:");
                             for (int i = 0; i < produtos.Count; i++)
                                 Console.WriteLine($"{i + 1} - {produtos[i].Nome} (R$ {produtos[i].Preco})");
 
@@ -128,23 +129,65 @@ namespace LojaVirtual
                             adicionando = Console.ReadLine().ToLower() == "s";
                         }
 
-                        var pedido = pedidoService.CriarPedido(idPedido++, clienteSelecionado, itens);
+                        Console.WriteLine("\nDeseja aplicar desconto?");
+                        Console.WriteLine("1 - Por Categoria");
+                        Console.WriteLine("2 - Por Quantidade");
+                        Console.WriteLine("0 - Nenhum");
 
-                        Console.WriteLine("\n--- Pedido Criado com Sucesso ---");
+                        Console.Write("Opção: ");
+                        string opcaoDesconto = Console.ReadLine();
+
+                        IDescontoStrategy estrategia = null;
+
+                        switch (opcaoDesconto)
+                        {
+                            case "1":
+                                Console.Write("Informe a categoria para aplicar desconto: ");
+                                string cat = Console.ReadLine();
+                                estrategia = new DescontoPorCategoria(cat, 0.10m);
+                                break;
+                            case "2":
+                                Console.Write("Informe a quantidade mínima para aplicar desconto: ");
+                                int qtd = int.Parse(Console.ReadLine());
+                                estrategia = new DescontoPorQuantidade(qtd, 0.05m);
+                                break;
+                            case "0":
+                                Console.WriteLine("Sem desconto aplicado.");
+                                break;
+                            default:
+                                Console.WriteLine("Opção inválida. Nenhum desconto aplicado.");
+                                break;
+                        }
+
+                        var pedido = pedidoService.CriarPedidoComDesconto(idPedido++, clienteSelecionado, itens, estrategia);
+
+                        Console.WriteLine("\n--- Pedido Criado ---");
                         Console.WriteLine($"Cliente: {pedido.Cliente.Nome}");
                         Console.WriteLine($"Data: {pedido.Data}");
                         foreach (var item in pedido.Itens)
                         {
-                            Console.WriteLine($"Produto: {item.Produto.Nome} | Qtd: {item.Quantidade} | Subtotal: R$ {item.Subtotal}");
+                            Console.WriteLine($"Produto: {item.Produto.Nome} | Qtd: {item.Quantidade} | Subtotal: R$ {item.Subtotal:0.00}");
                         }
-                        Console.WriteLine($"Valor Total: R$ {pedido.ValorTotal}");
+                        Console.WriteLine($"Valor Total Bruto: R$ {pedido.ValorTotal:0.00}");
                         break;
 
                     case "4":
-                        var pedidos = pedidoService.ObterPedidos();
-                        foreach (var p in pedidos)
+                        var pedidos = pedidoService.ObterPedidos().ToList();
+                        if (!pedidos.Any())
                         {
-                            Console.WriteLine($"\nPedido #{p.Id} - Cliente: {p.Cliente.Nome} - Total: R$ {p.ValorTotal}");
+                            Console.WriteLine("Nenhum pedido foi realizado ainda.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("\n--- Lista de Pedidos ---");
+                            foreach (var p in pedidos)
+                            {
+                                Console.WriteLine($"\nPedido #{p.Id} - {p.Cliente.Nome} - R$ {p.ValorTotal:0.00}");
+                                foreach (var item in p.Itens)
+                                {
+                                    Console.WriteLine($"  {item.Produto.Nome} x{item.Quantidade} - Subtotal: R$ {item.Subtotal:0.00}");
+                                }
+                            }
                         }
                         break;
 
