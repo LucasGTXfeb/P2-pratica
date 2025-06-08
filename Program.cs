@@ -181,14 +181,22 @@ namespace LojaVirtual
                         }
                         else
                         {
-                            Console.WriteLine("\n--- Lista de Pedidos ---");
+                            Console.WriteLine("\n======= Relatório de Pedidos =======");
+
                             foreach (var p in pedidos)
                             {
-                                Console.WriteLine($"\nPedido #{p.Id} - {p.Cliente.Nome} - R$ {p.ValorTotal:0.00}");
+                                Console.WriteLine($"\n🔹 Pedido #{p.Id}");
+                                Console.WriteLine($"🧾 Cliente: {p.Cliente.Nome}");
+                                Console.WriteLine($"📅 Data: {p.Data}");
+                                Console.WriteLine($"🛍️ Itens:");
+
                                 foreach (var item in p.Itens)
                                 {
-                                    Console.WriteLine($"  {item.Produto.Nome} x{item.Quantidade} - Subtotal: R$ {item.Subtotal:0.00}");
+                                    Console.WriteLine($"  - {item.Produto.Nome} | Quantidade: {item.Quantidade} | Subtotal: R$ {item.Subtotal:0.00}");
                                 }
+
+                                Console.WriteLine($"💰 Total do Pedido: R$ {p.ValorTotal:0.00}");
+                                Console.WriteLine(new string('-', 40));
                             }
                         }
                         break;
